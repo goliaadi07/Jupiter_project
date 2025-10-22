@@ -14,10 +14,10 @@
 }
 /* 🌟 Floating bar that greets the user */
 
-.floating-bar {
+/* .floating-bar {
   position: absolute;
   top: 60%;
-  left: calc(50% + 240px); /* right side of the signup box */
+  left: calc(50% + 240px); 
   transform: translateY(-50%);
   background: linear-gradient(90deg, #43a047, #2e7d32);
   color: #fff;
@@ -32,7 +32,6 @@
   animation-fill-mode: forwards;
 }
 
-/* 👋 Slide-in effect */
 @keyframes slideInRight {
   0% {
     transform: translate(80px, -50%);
@@ -44,7 +43,6 @@
   }
 }
 
-/* 🌬 Floating hover effect */
 @keyframes floatUpDown {
   0%, 100% {
     transform: translateY(-50%);
@@ -59,7 +57,6 @@
   font-weight: 700;
 }
 
-/* 📱 Responsive behavior */
 @media (max-width: 768px) {
   .floating-bar {
     position: static;
@@ -214,7 +211,245 @@ button:hover {
   flex-direction: column;
 }
  */
-/* ⚠️ Floating popup for alerts */
+/* ⚠️ Floating popup for alerts 
+.popup {
+  position: fixed;
+  top: 20px;
+  right: 50%;
+  transform: translateX(50%);
+  background: linear-gradient(to right, #ef4444, #dc2626);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  text-align: center;
+  font-size: 14px;
+  animation: fadeIn 0.4s ease;
+}
+
+.popup.success {
+  background: linear-gradient(to right, #22c55e, #16a34a);
+} */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* === Background (same as login) === */
+.signup-bg {
+  background-image: url("/bgimg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Slightly faint but visible symbols */
+  filter: brightness(90%) contrast(110%);
+}
+
+/* === Container === */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: rgba(240, 236, 236, 0.88); /* faint overlay for readability */
+  color: white;
+}
+
+/* === Signup box === */
+.login-box {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 30px rgba(0,0,0,0.3);
+  max-width: 400px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+/* === Logo === */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-logo {
+  width: 50px;
+  margin-bottom: 8px;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #22c55e, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-tagline {
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  background: linear-gradient(to right, #16a34a, #2563eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* === Floating bar === */
+.floating-bar {
+  position: absolute;
+  top: 60%;
+  left: calc(50% + 240px);
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, #43a047, #2e7d32);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: slideInRight 0.6s ease-out, floatUpDown 4s ease-in-out infinite;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translate(80px, -50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0, -50%);
+    opacity: 1;
+  }
+}
+
+@keyframes floatUpDown {
+  0%, 100% {
+    transform: translateY(-50%);
+  }
+  50% {
+    transform: translateY(-55%);
+  }
+}
+
+.floating-bar span {
+  color: #ffe082;
+  font-weight: 700;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .floating-bar {
+    position: static;
+    margin-top: 15px;
+    text-align: center;
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+/* === Inputs === */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  background-color: rgba(255,255,255,0.12);
+  color: white;
+  font-size: 14px;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #22c55e, #3b82f6);
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+}
+button:hover {
+  transform: scale(1.03);
+  background: linear-gradient(to right, #34d399, #60a5fa);
+}
+
+/* === Messages === */
+.message {
+  margin-top: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  text-align: center;
+  background: rgba(34,197,94,0.2);
+  border: 1px solid #22c55e;
+  font-size: 13px;
+}
+
+/* === Divider === */
+.divider {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+.divider .line {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255,255,255,0.2);
+}
+.divider p {
+  margin: 0 10px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* === Signup box footer === */
+.signup-box {
+  margin-top: 1rem;
+  font-size: 13px;
+}
+
+/* === Floating greeting === */
+.floating-greet {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: linear-gradient(to right, #22c55e, #3b82f6);
+  padding: 8px 14px;
+  border-radius: 20px;
+  color: white;
+  font-size: 13px;
+  animation: fadeIn 0.4s ease;
+}
+
+/* === Popup alerts === */
 .popup {
   position: fixed;
   top: 20px;
@@ -235,24 +470,54 @@ button:hover {
 .popup.success {
   background: linear-gradient(to right, #22c55e, #16a34a);
 }
-/* ⚠️ Floating popup for alerts */
-.popup {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(to right, #ef4444, #dc2626);
-  color: white;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-  z-index: 9999;
-  text-align: center;
-  font-size: 14px;
-  animation: fadeIn 0.4s ease;
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom, #c9f0ff, #f0fff4);
+  overflow: hidden;
 }
 
-.popup.success {
-  background: linear-gradient(to right, #22c55e, #16a34a);
+/* Container positioned bottom-right */
+.deer-container {
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+}
+
+/* Deer size + animation */
+.deer {
+  width: 90px; /* smaller size */
+  animation: walkDeer 2.2s ease-in-out infinite, legMove 1.1s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+/* Slight sway + bob effect */
+@keyframes walkDeer {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateX(-2px) translateY(-2px) rotate(-1deg);
+  }
+  50% {
+    transform: translateX(2px) translateY(0) rotate(1deg);
+  }
+  75% {
+    transform: translateX(-2px) translateY(2px) rotate(-1deg);
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+}
+
+/* Light leg movement illusion */
+@keyframes legMove {
+  0%, 100% {
+    filter: brightness(1);
+    transform: scaleY(1);
+  }
+  50% {
+    filter: brightness(0.9);
+    transform: scaleY(0.98);
+  }
 }

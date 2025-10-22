@@ -432,7 +432,7 @@ import {
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(8);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState("All");
 
@@ -456,7 +456,6 @@ export default function Home() {
 
   const navigate = useNavigate();
 
-  // ✅ Check if user is logged in
   useEffect(() => {
     api
       .get("/home")
@@ -466,7 +465,6 @@ export default function Home() {
       });
   }, [navigate]);
 
-  // ✅ Fetch jobs from API
   const fetchJobs = async (query = "") => {
     try {
       let url = "http://localhost:3232/aijobs";
@@ -482,7 +480,6 @@ export default function Home() {
     fetchJobs();
   }, []);
 
-  // ✅ Search
   const handleSearch = () => {
     if (!search.trim()) {
       fetchJobs();
@@ -497,18 +494,15 @@ export default function Home() {
     fetchJobs(query);
   };
 
-  // ✅ Logout
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/", { replace: true });
   };
 
-  // ✅ Handle input
   const handleChange = (e) => {
     setNewJob({ ...newJob, [e.target.name]: e.target.value });
   };
 
-  // ✅ Add / Edit
   const handleAddOrUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -520,7 +514,6 @@ export default function Home() {
         alert("✅ Job added successfully!");
       }
 
-      // Reset form safely
       setNewJob({
         job_Title: "",
         Industry: "",
@@ -544,7 +537,6 @@ export default function Home() {
     }
   };
 
-  // ✅ Edit
   const handleEdit = (job) => {
     setNewJob(job);
     setSelectedId(job.id);
@@ -552,12 +544,11 @@ export default function Home() {
     setShowForm(true);
   };
 
-  // ✅ Delete
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this job?")) {
       try {
         await axios.delete(`http://localhost:3232/aijobs/${id}`);
-        alert("🗑️ Job deleted successfully!");
+        alert(" Job deleted successfully!");
         fetchJobs();
       } catch (error) {
         alert("❌ Failed to delete job");
@@ -565,12 +556,10 @@ export default function Home() {
     }
   };
 
-  // ✅ Load More
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 6);
   };
 
-  // ✅ Chart data
   const industryData = Object.entries(
     jobs.reduce((acc, job) => {
       acc[job.Industry] = (acc[job.Industry] || 0) + 1;
@@ -600,8 +589,8 @@ export default function Home() {
         backgroundColor: "#fff",
         color: "#222",
         minHeight: "100vh",
-        overflowY: "auto",
-        display: "flex",
+        // overflowY: "auto",
+        display: "block",
         flexDirection: "column",
       }}
     >
@@ -1018,7 +1007,165 @@ export default function Home() {
         <p style={{ fontSize: "13px", color: "#4caf50" }}>
           Built with ❤️ by Aditya Ashok Goli
         </p>
+        {/* LinkedIn Button */}
+  <a
+    href="https://www.linkedin.com/in/aditya-goli-a508971a8?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "inline-flex",
+      alignItems: "center",
+      gap: "8px",
+      backgroundColor: "#0A66C2",
+      color: "white",
+      padding: "8px 14px",
+      borderRadius: "30px",
+      textDecoration: "none",
+      fontSize: "14px",
+      marginTop: "10px",
+      transition: "background-color 0.3s",
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#004182")}
+    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#0A66C2")}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      width="18"
+      height="18"
+    >
+      <path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.98 0h3.83v2.2h.05c.53-1 1.83-2.2 3.77-2.2 4.03 0 4.78 2.65 4.78 6.1V24h-4v-7.9c0-1.9-.03-4.34-2.64-4.34-2.64 0-3.04 2.06-3.04 4.19V24h-4V8z" />
+    </svg>
+    LinkedIn
+  </a>
       </footer>
     </div>
   );
 }
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import api from "./api/axios";
+
+// function Signup() {
+//   const [form, setForm] = useState({ name: "", username: "", password: "" });
+//   const [popup, setPopup] = useState(null);
+//   const navigate = useNavigate();
+
+//   const showPopup = (text, type = "error") => {
+//     setPopup({ text, type });
+//     setTimeout(() => setPopup(null), 2000);
+//   };
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const validateForm = () => {
+//     if (!form.name || !form.username || !form.password) {
+//       showPopup("⚠️ Please fill all fields");
+//       return false;
+//     }
+
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailRegex.test(form.username)) {
+//       showPopup("📧 Enter a valid email (e.g. user@example.com)");
+//       return false;
+//     }
+
+//     if (
+//       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(form.password)
+//     ) {
+//       showPopup(
+//         "🔒 Password must include uppercase, lowercase, number & symbol (8+ chars)"
+//       );
+//       return false;
+//     }
+
+//     return true;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     if (!validateForm()) return;
+
+//     try {
+//       const res = await api.post("/auth/signup", form);
+//       showPopup(res.data, "success");
+//       setTimeout(() => navigate("/"), 1500);
+//     } catch (err) {
+//       const msg =
+//         err.response?.data ||
+//         "⚠️ Something went wrong. Please try again later.";
+//       showPopup(msg);
+//     }
+//   };
+
+//   return (
+//     <div className="container">
+//       <div className="login-box">
+//         <div className="logo-container">
+//           <img src="/vite.svg" alt="App Logo" className="app-logo" />
+//           <h1 className="logo-text">JupIter</h1>
+//           <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
+//             ⚡ AI Adoption Analyzer ⚡
+//           </span>
+//         </div>
+
+//         <form onSubmit={handleSubmit}>
+//           <input
+//             type="text"
+//             name="name"
+//             placeholder="Full Name"
+//             value={form.name}
+//             onChange={handleChange}
+//           />
+//           <input
+//             type="text"
+//             name="username"
+//             placeholder="Email"
+//             value={form.username}
+//             onChange={handleChange}
+//           />
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//             value={form.password}
+//             onChange={handleChange}
+//           />
+//           <button type="submit">Sign up</button>
+//         </form>
+
+//         <div className="divider">
+//           <div className="line"></div>
+//           <p>OR</p>
+//           <div className="line"></div>
+//         </div>
+//       </div>
+
+//       <div className="signup-box">
+//         <p>
+//           Already have an account?{" "}
+//           <Link to="/" style={{ color: "#48854f", fontWeight: "600" }}>
+//             Log in
+//           </Link>
+//         </p>
+//       </div>
+
+//       {form.name.trim() && (
+//         <div className="floating-greet animate-fadeIn">
+//           👋 Hi, <span>{form.name.split(" ")[0]}</span>!
+//         </div>
+//       )}
+
+//       {popup && (
+//         <div className={`popup ${popup.type} animate-fadeIn`}>
+//           {popup.text}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default Signup;

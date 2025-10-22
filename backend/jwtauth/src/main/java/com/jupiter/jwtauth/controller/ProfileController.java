@@ -26,7 +26,6 @@ public class ProfileController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // ✅ Get user details from JWT
     @GetMapping("/me")
     public User getUserProfile() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +35,6 @@ public class ProfileController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // ✅ Update user details (only if logged in)
     @PutMapping("/update")
     public String updateProfile(@RequestBody Map<String, String> request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,6 +52,6 @@ public class ProfileController {
         }
 
         userRepository.save(user);
-        return "✅ Profile updated successfully!";
+        return "✅ Profile updated successfully!.";
     }
 }

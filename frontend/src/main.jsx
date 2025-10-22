@@ -8,6 +8,36 @@
 //     <Signup />
 //   </StrictMode>,
 // )
+
+// import { StrictMode } from "react";
+// import { createRoot } from "react-dom/client";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import App from "./App.jsx";
+// import Signup from "./Signup.jsx";
+// import Home from "./Home.jsx";
+// import Profile from "./Profile.jsx";
+// import ForgotPassword from "./forgotpassword.jsx";
+// import ResetPassword from "./resetpass.jsx";
+
+
+// createRoot(document.getElementById("root")).render(
+//   <StrictMode>
+//     <BrowserRouter>
+//       <Routes>
+//         <Route path="/" element={<App />} />
+//         <Route path="/signup" element={<Signup />} />
+//         <Route path="/home" element={<Home/>} />
+//         <Route path="/profile" element={<Profile/>} />
+//         <Route path="/forgotpassword" element={<ForgotPassword/>} />
+//         <Route path="/reset-password" element={<ResetPassword/>} />
+
+//       </Routes>
+//     </BrowserRouter>
+//   </StrictMode>
+// );
+
+
+
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -17,19 +47,19 @@ import Home from "./Home.jsx";
 import Profile from "./Profile.jsx";
 import ForgotPassword from "./forgotpassword.jsx";
 import ResetPassword from "./resetpass.jsx";
-
+import OpenHome from "./OpenHome.jsx"; 
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<OpenHome />} />   {/* Default public page */}
+        <Route path="/login" element={<App />} />   {/* App.jsx = Login page */}
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home/>} />
-        <Route path="/profile" element={<Profile/>} />
-        <Route path="/forgotpassword" element={<ForgotPassword/>} />
-        <Route path="/reset-password" element={<ResetPassword/>} />
-
+        <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

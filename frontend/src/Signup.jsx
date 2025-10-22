@@ -1,3 +1,344 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "./api/axios";
+import { Eye, EyeOff } from "lucide-react";
+
+
+function Signup() {
+  const [form, setForm] = useState({
+    name: "",
+    username: "",
+    password: "",
+  });
+  const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const [popup, setPopup] = useState(null);
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false); 
+
+
+  const showPopup = (text, type = "error") => {
+    setPopup({ text, type });
+    setTimeout(() => setPopup(null), 2000);
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!form.name.trim() || !form.username.trim() || !form.password.trim()) {
+      showPopup("⚠️ Please fill all fields");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.username)) {
+      newErrors.username = "Enter a valid email (e.g. user@example.com)";
+    }
+
+    if (
+      form.password.trim() &&
+      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        form.password
+      )
+    ) {
+      newErrors.password =
+        "Password must have 8+ chars, include uppercase, lowercase, number, and special char";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+
+    if (!validateForm()) return;
+
+    try {
+      await api.post("/auth/signup", form);
+      setMessage("✅ Account created successfully! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      showPopup("⚠️ Email already exists or invalid data");
+    }
+  };
+
+  return (
+    <div className="app-bg">
+      <div className="container">
+        <div className="login-box">
+          <div className="logo-container">
+            <img src="/vite.svg" alt="App Logo" className="app-logo" />
+            <h1 className="logo-text">JupIter</h1>
+            <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
+              ⚡ AI Adoption Analyzer ⚡
+            </span>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Full Name"
+              value={form.name}
+              onChange={handleChange}
+            />
+            {errors.name && <p className="error-text">{errors.name}</p>}
+
+            <input
+              type="text"
+              name="username"
+              placeholder="Email"
+              value={form.username}
+              onChange={handleChange}
+            />
+            {errors.username && <p className="error-text">{errors.username}</p>}
+
+            {/* <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+            />
+
+            {errors.password && <p className="error-text">{errors.password}</p>} */}
+            {/* ==== Password field with eye toggle ==== */}
+<div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Password"
+    value={form.password}
+    onChange={handleChange}
+    required
+    style={{
+      flex: 1,
+      borderRadius: "35px",
+      border: "1px solid #ccc",
+      padding: "10px 40px 10px 10px",
+      backgroundColor: "#fff",
+      color: "#000",
+    }}
+  />
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    style={{
+      position: "absolute",
+      right: "15px",
+      cursor: "pointer",
+      color: showPassword ? "#2e7d32" : "#555",
+      transition: "color 0.3s ease",
+    }}
+  >
+    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+  </span>
+</div>
+
+{errors.password && <p className="error-text">{errors.password}</p>}
+
+            
+            <button type="submit">Sign Up</button>
+
+            {message && <div className="message">{message}</div>}
+          </form>
+
+          <div className="divider">
+            <div className="line"></div>
+            <p>OR</p>
+            <div className="line"></div>
+          </div>
+        </div>
+
+        <div className="signup-box">
+          <p>
+            Already have an account?{" "}
+            <Link to="/login" style={{ color: "#48854f", fontWeight: "600" }}>
+              Log in
+            </Link>
+          </p>
+        </div>
+
+        {/* 👋 Floating Greeting */}
+        {form.name.trim() && (
+          <div className="floating-greet animate-fadeIn">
+            👋 Hi, <span>{form.name.split(" ")[0]}</span>!
+          </div>
+        )}
+
+        {/* ⚠️ Popup */}
+        {popup && (
+          <div className={`popup ${popup.type} animate-fadeIn`}>
+            {popup.text}
+          </div>
+        )}
+        <div className="deer-container">
+  <img src="/deer-svgrepo-com.svg" alt="Deer walking" className="deer" />
+</div>
+      </div>
+    </div>
+  );
+}
+
+export default Signup;
+
+
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import api from "./api/axios";
+
+// function Signup() {
+//   const [form, setForm] = useState({
+//     name: "",
+//     username: "",
+//     password: "",
+//   });
+//   const [message, setMessage] = useState("");
+//   const [errors, setErrors] = useState({});
+//   const [popup, setPopup] = useState(null);
+//   const navigate = useNavigate();
+
+//   // ⚡ Popup handler
+//   const showPopup = (text, type = "error") => {
+//     setPopup({ text, type });
+//     setTimeout(() => setPopup(null), 2000); // disappears after 2s
+//   };
+
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
+
+//   const validateForm = () => {
+//     const newErrors = {};
+
+//     // 🚨 Popup for empty fields
+//     if (!form.name.trim() || !form.username.trim() || !form.password.trim()) {
+//       showPopup("⚠️ Please fill all fields");
+//       return false;
+//     }
+
+//     // ✅ Email validation
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailRegex.test(form.username)) {
+//       newErrors.username = "Enter a valid email (e.g. user@example.com)";
+//     }
+
+//     // ✅ Password validation
+//     if (
+//       form.password.trim() &&
+//       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+//         form.password
+//       )
+//     ) {
+//       newErrors.password =
+//         "Password must have 8+ chars, include uppercase, lowercase, number, and special char";
+//     }
+
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setMessage("");
+
+//     if (!validateForm()) return;
+
+//     try {
+//       await api.post("/auth/signup", form);
+//       setMessage("✅ Account created successfully! Redirecting to login...");
+//       setTimeout(() => navigate("/"), 1500);
+//     } catch (err) {
+//       showPopup("⚠️ Email already exists or invalid data");
+//     }
+//   };
+
+//   return (
+//     <div className="container">
+//       <div className="login-box">
+//         <div className="logo-container">
+//           <img src="/vite.svg" alt="App Logo" className="app-logo" />
+//           <h1 className="logo-text">JupIter</h1>
+//           <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
+//             ⚡ AI Adoption Analyzer ⚡
+//           </span>
+//         </div>
+
+//         <form onSubmit={handleSubmit}>
+//           {/* Name Input */}
+//           <input
+//             type="text"
+//             name="name"
+//             placeholder="Full Name"
+//             value={form.name}
+//             onChange={handleChange}
+//           />
+//           {errors.name && <p className="error-text">{errors.name}</p>}
+
+//           {/* Username (Email) Input */}
+//           <input
+//             type="text"
+//             name="username"
+//             placeholder="Email"
+//             value={form.username}
+//             onChange={handleChange}
+//           />
+//           {errors.username && <p className="error-text">{errors.username}</p>}
+
+//           {/* Password Input */}
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//             value={form.password}
+//             onChange={handleChange}
+//           />
+//           {errors.password && <p className="error-text">{errors.password}</p>}
+
+//           <button type="submit">Sign up</button>
+
+//           {message && <div className="message">{message}</div>}
+//         </form>
+
+//         <div className="divider">
+//           <div className="line"></div>
+//           <p>OR</p>
+//           <div className="line"></div>
+//         </div>
+//       </div>
+
+//       <div className="signup-box">
+//         <p>
+//           Already have an account?{" "}
+//           <Link to="/" style={{ color: "#48854f", fontWeight: "600" }}>
+//             Log in
+//           </Link>
+//         </p>
+//       </div>
+
+//       {/* 👋 Floating Greeting Bar */}
+//       {form.name.trim() && (
+//         <div className="floating-greet animate-fadeIn">
+//           👋 Hi, <span>{form.name.split(" ")[0]}</span>!
+//         </div>
+//       )}
+
+//       {/* ⚠️ Floating Popup */}
+//       {popup && (
+//         <div className={`popup ${popup.type} animate-fadeIn`}>{popup.text}</div>
+//       )}
+      
+//     </div>
+    
+//   );
+// }
+
+// export default Signup;
 // import { useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";
 // import api from "./api/axios";
@@ -143,155 +484,155 @@
 
 // export default Signup;
 
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import api from "./api/axios";
+// import { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import api from "./api/axios";
 
-function Signup() {
-  const [form, setForm] = useState({
-    name: "",
-    username: "",
-    password: "",
-  });
-  const [message, setMessage] = useState("");
-  const [errors, setErrors] = useState({});
-  const [popup, setPopup] = useState(null);
-  const navigate = useNavigate();
+// function Signup() {
+//   const [form, setForm] = useState({
+//     name: "",
+//     username: "",
+//     password: "",
+//   });
+//   const [message, setMessage] = useState("");
+//   const [errors, setErrors] = useState({});
+//   const [popup, setPopup] = useState(null);
+//   const navigate = useNavigate();
 
-  // ⚡ Popup handler
-  const showPopup = (text, type = "error") => {
-    setPopup({ text, type });
-    setTimeout(() => setPopup(null), 2000); // disappears after 2s
-  };
+//   // ⚡ Popup handler
+//   const showPopup = (text, type = "error") => {
+//     setPopup({ text, type });
+//     setTimeout(() => setPopup(null), 2000); // disappears after 2s
+//   };
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//   };
 
-  const validateForm = () => {
-    const newErrors = {};
+//   const validateForm = () => {
+//     const newErrors = {};
 
-    // 🚨 Popup for empty fields
-    if (!form.name.trim() || !form.username.trim() || !form.password.trim()) {
-      showPopup("⚠️ Please fill all fields");
-      return false;
-    }
+//     // 🚨 Popup for empty fields
+//     if (!form.name.trim() || !form.username.trim() || !form.password.trim()) {
+//       showPopup("⚠️ Please fill all fields");
+//       return false;
+//     }
 
-    // ✅ Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.username)) {
-      newErrors.username = "Enter a valid email (e.g. user@example.com)";
-    }
+//     // ✅ Email validation
+//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailRegex.test(form.username)) {
+//       newErrors.username = "Enter a valid email (e.g. user@example.com)";
+//     }
 
-    // ✅ Password validation
-    if (
-      form.password.trim() &&
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        form.password
-      )
-    ) {
-      newErrors.password =
-        "Password must have 8+ chars, include uppercase, lowercase, number, and special char";
-    }
+//     // ✅ Password validation
+//     if (
+//       form.password.trim() &&
+//       !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+//         form.password
+//       )
+//     ) {
+//       newErrors.password =
+//         "Password must have 8+ chars, include uppercase, lowercase, number, and special char";
+//     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+//     setErrors(newErrors);
+//     return Object.keys(newErrors).length === 0;
+//   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage("");
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setMessage("");
 
-    if (!validateForm()) return;
+//     if (!validateForm()) return;
 
-    try {
-      await api.post("/auth/signup", form);
-      setMessage("✅ Account created successfully! Redirecting to login...");
-      setTimeout(() => navigate("/"), 1500);
-    } catch (err) {
-      showPopup("⚠️ Email already exists or invalid data");
-    }
-  };
+//     try {
+//       await api.post("/auth/signup", form);
+//       setMessage("✅ Account created successfully! Redirecting to login...");
+//       setTimeout(() => navigate("/"), 1500);
+//     } catch (err) {
+//       showPopup("⚠️ Email already exists or invalid data");
+//     }
+//   };
 
-  return (
-    <div className="container">
-      <div className="login-box">
-        <div className="logo-container">
-          <img src="/vite.svg" alt="App Logo" className="app-logo" />
-          <h1 className="logo-text">JupIter</h1>
-          <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
-            ⚡ AI Adoption Analyzer ⚡
-          </span>
-        </div>
+//   return (
+//     <div className="container">
+//       <div className="login-box">
+//         <div className="logo-container">
+//           <img src="/vite.svg" alt="App Logo" className="app-logo" />
+//           <h1 className="logo-text">JupIter</h1>
+//           <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
+//             ⚡ AI Adoption Analyzer ⚡
+//           </span>
+//         </div>
 
-        <form onSubmit={handleSubmit}>
-          {/* Name Input */}
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={form.name}
-            onChange={handleChange}
-          />
-          {errors.name && <p className="error-text">{errors.name}</p>}
+//         <form onSubmit={handleSubmit}>
+//           {/* Name Input */}
+//           <input
+//             type="text"
+//             name="name"
+//             placeholder="Full Name"
+//             value={form.name}
+//             onChange={handleChange}
+//           />
+//           {errors.name && <p className="error-text">{errors.name}</p>}
 
-          {/* Username (Email) Input */}
-          <input
-            type="text"
-            name="username"
-            placeholder="Email"
-            value={form.username}
-            onChange={handleChange}
-          />
-          {errors.username && <p className="error-text">{errors.username}</p>}
+//           {/* Username (Email) Input */}
+//           <input
+//             type="text"
+//             name="username"
+//             placeholder="Email"
+//             value={form.username}
+//             onChange={handleChange}
+//           />
+//           {errors.username && <p className="error-text">{errors.username}</p>}
 
-          {/* Password Input */}
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-          />
-          {errors.password && <p className="error-text">{errors.password}</p>}
+//           {/* Password Input */}
+//           <input
+//             type="password"
+//             name="password"
+//             placeholder="Password"
+//             value={form.password}
+//             onChange={handleChange}
+//           />
+//           {errors.password && <p className="error-text">{errors.password}</p>}
 
-          <button type="submit">Sign up</button>
+//           <button type="submit">Sign up</button>
 
-          {message && <div className="message">{message}</div>}
-        </form>
+//           {message && <div className="message">{message}</div>}
+//         </form>
 
-        <div className="divider">
-          <div className="line"></div>
-          <p>OR</p>
-          <div className="line"></div>
-        </div>
-      </div>
+//         <div className="divider">
+//           <div className="line"></div>
+//           <p>OR</p>
+//           <div className="line"></div>
+//         </div>
+//       </div>
 
-      <div className="signup-box">
-        <p>
-          Already have an account?{" "}
-          <Link to="/" style={{ color: "#48854f", fontWeight: "600" }}>
-            Log in
-          </Link>
-        </p>
-      </div>
+//       <div className="signup-box">
+//         <p>
+//           Already have an account?{" "}
+//           <Link to="/" style={{ color: "#48854f", fontWeight: "600" }}>
+//             Log in
+//           </Link>
+//         </p>
+//       </div>
 
-      {/* 👋 Floating Greeting Bar */}
-      {form.name.trim() && (
-        <div className="floating-greet animate-fadeIn">
-          👋 Hi, <span>{form.name.split(" ")[0]}</span>!
-        </div>
-      )}
+//       {/* 👋 Floating Greeting Bar */}
+//       {form.name.trim() && (
+//         <div className="floating-greet animate-fadeIn">
+//           👋 Hi, <span>{form.name.split(" ")[0]}</span>!
+//         </div>
+//       )}
 
-      {/* ⚠️ Floating Popup */}
-      {popup && (
-        <div className={`popup ${popup.type} animate-fadeIn`}>{popup.text}</div>
-      )}
-    </div>
-  );
-}
+//       {/* ⚠️ Floating Popup */}
+//       {popup && (
+//         <div className={`popup ${popup.type} animate-fadeIn`}>{popup.text}</div>
+//       )}
+//     </div>
+//   );
+// }
 
-export default Signup;
+// export default Signup;
 
 // import { useState } from "react";
 // import { Link, useNavigate } from "react-router-dom";

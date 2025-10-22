@@ -24,24 +24,20 @@ public class PasswordResetToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // ✅ Default constructor
     public PasswordResetToken() {}
 
-    // ✅ Constructor with token and user (15 min expiry by default)
     public PasswordResetToken(String token, User user) {
         this.token = token;
         this.user = user;
         this.expiryDate = LocalDateTime.now().plusMinutes(15);
     }
 
-    // ✅ Constructor with explicit expiry date
     public PasswordResetToken(String token, User user, LocalDateTime expiryDate) {
         this.token = token;
         this.user = user;
         this.expiryDate = expiryDate;
     }
 
-    // ✅ Getters and setters
     public Long getId() {
         return id;
     }
@@ -74,7 +70,6 @@ public class PasswordResetToken {
         this.user = user;
     }
 
-    // ✅ Utility method
     public boolean isExpired() {
         return expiryDate.isBefore(LocalDateTime.now());
     }

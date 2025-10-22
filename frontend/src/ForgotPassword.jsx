@@ -157,6 +157,95 @@
 //     </div>
 //   );
 // }
+
+// import { useState } from "react";
+// import { Link } from "react-router-dom";
+// import api from "./api/axios";
+
+// export default function ForgotPassword() {
+//   const [email, setEmail] = useState("");
+//   const [message, setMessage] = useState("");
+//   const [isSent, setIsSent] = useState(false);
+
+//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setMessage("");
+//     setIsSent(false);
+
+//     if (!email.trim()) {
+//       setMessage("⚠️ Email is required");
+//       return;
+//     }
+//     if (!emailRegex.test(email)) {
+//       setMessage("⚠️ Enter a valid email (e.g. user@example.com)");
+//       return;
+//     }
+
+//     try {
+//       await api.post("/auth/forgot-password", { email });
+//       setMessage("✅ Password reset link has been sent to your email!");
+//       setIsSent(true);
+//     } catch (err) {
+//       setMessage("❌ Failed to send reset link or Invalid Email. Please try again.");
+//       setIsSent(false);
+//     }
+//   };
+
+//   return (
+//     <div className="container">
+//       <div className="login-box">
+//         <div className="logo-container">
+//           <img src="/vite.svg" alt="App Logo" className="app-logo" />
+//           <h1 className="logo-text">JupIter</h1>
+//         </div>
+
+//         <form onSubmit={handleSubmit}>
+//           <input
+//             type="email"
+//             name="email"
+//             placeholder="Enter your registered email"
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             disabled={isSent} 
+//           />
+
+//           <button type="submit" disabled={isSent}>
+//             {isSent ? "Link Sent ✓" : "Send Reset Link"}
+//           </button>
+
+//           {message && (
+//             <div
+//               className="message"
+//               style={{
+//                 marginTop: "12px",
+//                 fontSize: "14px",
+//                 color: message.includes("✅") ? "#2e7d32" : "#c62828",
+//                 fontWeight: "500",
+//                 transition: "0.3s ease",
+//               }}
+//             >
+//               {message}
+//             </div>
+//           )}
+//         </form>
+
+//         <div className="divider">
+//           <div className="line"></div>
+//           <p>OR</p>
+//           <div className="line"></div>
+//         </div>
+
+//         <p className="forgot">
+//           <Link to="/" style={{ color: "#48854f", textDecoration: "none" }}>
+//             ← Back to Login
+//           </Link>
+//         </p>
+//       </div>
+//     </div>
+//   );
+// }
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "./api/axios";
@@ -187,61 +276,76 @@ export default function ForgotPassword() {
       setMessage("✅ Password reset link has been sent to your email!");
       setIsSent(true);
     } catch (err) {
-      setMessage("❌ Failed to send reset link or Invalid Email. Please try again.");
+      setMessage(
+        "❌ Failed to send reset link or Invalid Email. Please try again."
+      );
       setIsSent(false);
     }
   };
 
   return (
-    <div className="container">
-      <div className="login-box">
-        <div className="logo-container">
-          <img src="/vite.svg" alt="App Logo" className="app-logo" />
-          <h1 className="logo-text">JupIter</h1>
-        </div>
+    <div className="app-bg">
+      <div className="container">
+        <div className="login-box">
+          <div className="logo-container">
+            <img src="/vite.svg" alt="App Logo" className="app-logo" />
+            <h1 className="logo-text">JupIter</h1>
+            <span className="inline-block mt-2 text-xs font-semibold text-white px-3 py-1 rounded-full bg-gradient-to-r from-green-600 to-blue-500 shadow-lg">
+              ⚡ AI Adoption Analyzer ⚡
+            </span>
+          </div>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter your registered email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isSent} // disable input after sending
-          />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your registered email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isSent}
+            />
 
-          <button type="submit" disabled={isSent}>
-            {isSent ? "Link Sent ✓" : "Send Reset Link"}
-          </button>
+            <button type="submit" disabled={isSent}>
+              {isSent ? "Link Sent ✓" : "Send Reset Link"}
+            </button>
 
-          {message && (
-            <div
-              className="message"
+            {message && (
+              <div
+                className="message"
+                style={{
+                  marginTop: "12px",
+                  fontSize: "14px",
+                  color: message.includes("✅") ? "#2e7d32" : "#c62828",
+                  fontWeight: "500",
+                  transition: "0.3s ease",
+                }}
+              >
+                {message}
+              </div>
+            )}
+          </form>
+
+          <div className="divider">
+            <div className="line"></div>
+            <p>OR</p>
+            <div className="line"></div>
+          </div>
+
+          <p className="forgot">
+            <Link
+              to="/login"
               style={{
-                marginTop: "12px",
-                fontSize: "14px",
-                color: message.includes("✅") ? "#2e7d32" : "#c62828",
-                fontWeight: "500",
-                transition: "0.3s ease",
+                color: "#48854f",
+                textDecoration: "none",
+                fontWeight: "600",
               }}
             >
-              {message}
-            </div>
-          )}
-        </form>
-
-        <div className="divider">
-          <div className="line"></div>
-          <p>OR</p>
-          <div className="line"></div>
+              ← Back to Login
+            </Link>
+          </p>
         </div>
-
-        <p className="forgot">
-          <Link to="/" style={{ color: "#48854f", textDecoration: "none" }}>
-            ← Back to Login
-          </Link>
-        </p>
       </div>
     </div>
   );
 }
+
